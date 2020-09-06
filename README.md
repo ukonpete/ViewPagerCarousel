@@ -1,6 +1,8 @@
 # Slider
 Based on https://github.com/aungk000/Slider
 
+***NOW IN KOTLIN***
+
 Android library for sliding views and fragments with default indicators and view transitions.
 
 Usage
