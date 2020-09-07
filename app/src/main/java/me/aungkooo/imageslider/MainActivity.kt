@@ -2,6 +2,8 @@ package me.aungkooo.imageslider
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import me.aungkooo.imageslider.databinding.ActivityMainBinding
@@ -11,11 +13,13 @@ import me.aungkooo.imageslider.fragment.MotionFragment
 import me.aungkooo.slider.DepthPageTransformer
 import me.aungkooo.slider.DotIndicator
 import me.aungkooo.slider.FragmentAdapter
+import me.aungkooo.slider.SliderBase
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private val showViewSlider = true
+    private val useRecycler = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,16 +41,39 @@ class MainActivity : AppCompatActivity() {
             itemList.add(HeaderItem(title, images[index]))
         }
 
-        if (showViewSlider) {
-            binding.slider.viewAdapter = SliderAdapter(this, itemList)
-        } else {
-            val fragmentList = ArrayList<Fragment>()
-            val fragments = arrayOf(BoldFragment(), MetaphorFragment(), MotionFragment())
-            Collections.addAll(fragmentList, *fragments)
-            binding.slider.fragmentAdapter = FragmentAdapter(supportFragmentManager, fragmentList)
-        }
+        val recyclerSlider = binding.recyclerSlider
+        val slider = binding.slider
+        val visibleSlider = getFragmentSlider(binding)
 
-        binding.slider.setIndicator(DotIndicator(this))
-        binding.slider.setPageTransformer(DepthPageTransformer())
+        if (showViewSlider) {
+            if (useRecycler) {
+                slider.visibility = GONE
+                recyclerSlider.visibility = VISIBLE
+                recyclerSlider.recyclerViewAdapter = SliderRecyclerAdapter(this, itemList)
+            } else {
+                recyclerSlider.visibility = GONE
+                slider.visibility = VISIBLE
+                slider.viewAdapter = SliderAdapter(this, itemList)
+            }
+        } else {
+            showFragmentSlider(visibleSlider)
+        }
+        visibleSlider.setIndicator(DotIndicator(this))
+        visibleSlider.setPageTransformer(DepthPageTransformer())
+    }
+
+    private fun getFragmentSlider(binding: ActivityMainBinding): SliderBase {
+        return if (useRecycler) {
+            binding.recyclerSlider
+        } else {
+            binding.slider
+        }
+    }
+
+    private fun showFragmentSlider(slider: SliderBase) {
+        val fragmentList = ArrayList<Fragment>()
+        val fragments = arrayOf(BoldFragment(), MetaphorFragment(), MotionFragment())
+        Collections.addAll(fragmentList, *fragments)
+        slider.fragmentAdapter = FragmentAdapter(supportFragmentManager, fragmentList)
     }
 }

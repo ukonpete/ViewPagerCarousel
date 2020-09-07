@@ -4,20 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import java.security.InvalidParameterException
 
-/**
- * Created by Ko Oo on 25/5/2018.
- */
-
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-class Slider : SliderBase {
+class RecyclerSlider : SliderBase {
 
-    constructor(context: Context?) : super(context)
-
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    var viewAdapter: ViewAdapter<*, *>? = null
+    var recyclerViewAdapter: RecyclerViewAdapter<*, *>? = null
         get() {
             if (field == null) {
                 throw NullPointerException("Adapter must not be null")
@@ -32,4 +22,11 @@ class Slider : SliderBase {
             } ?: throw InvalidParameterException("Adapter must not be null")
             field = viewAdapter
         }
+
+    constructor(context: Context?) : super(context)
+
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+
 }

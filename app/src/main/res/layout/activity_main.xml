@@ -10,4 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <me.aungkooo.slider.RecyclerSlider
+        android:id="@+id/recyclerSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
 </RelativeLayout>
